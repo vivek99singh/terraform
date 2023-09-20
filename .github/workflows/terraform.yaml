@@ -19,33 +19,47 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Debug Environment Variables
-        run: |
-          echo "ARM_CLIENT_ID: $ARM_CLIENT_ID"
-          echo "ARM_CLIENT_SECRET: $ARM_CLIENT_SECRET"
-          echo "ARM_SUBSCRIPTION_ID: $ARM_SUBSCRIPTION_ID"
-          echo "ARM_TENANT_ID: $ARM_TENANT_ID"
-        env:
-          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-          ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-      
-      - name: Configure Azure credentials
-        run: |
-          echo "ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}" >> $GITHUB_ENV
-          echo "ARM_CLIENT_SECRET=${{ secrets.AZURE_CLIENT_SECRET }}" >> $GITHUB_ENV
-          echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
-          echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
+#      - name: Debug Environment Variables
+#        run: |
+#          echo "ARM_CLIENT_ID: $ARM_CLIENT_ID"
+#          echo "ARM_CLIENT_SECRET: $ARM_CLIENT_SECRET"
+#          echo "ARM_SUBSCRIPTION_ID: $ARM_SUBSCRIPTION_ID"
+#          echo "ARM_TENANT_ID: $ARM_TENANT_ID"
+#        env:
+#          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+#          ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+#          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+#          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+#      
+#      - name: Configure Azure credentials
+#        run: |
+#          echo "ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}" >> $GITHUB_ENV
+#          echo "ARM_CLIENT_SECRET=${{ secrets.AZURE_CLIENT_SECRET }}" >> $GITHUB_ENV
+#          echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
+#          echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
+
+      - name: Set up Azure CLI
+        uses: azure/login@v1
         with:
-          terraform_version: 1.0.9
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          
+      - name: Set up Environment Variables
+        run: |
+          export TF_VAR_client_id=${{ secrets.AZURE_CLIENT_ID }}
+          export TF_VAR_client_SECRET=${{ secrets.AZURE_CLIENT_SECRET }}          
+          export TF_VAR_SUBSCRIPTION_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          export TF_VAR_TENANT_id=${{ secrets.AZURE_TENANT_ID }}
 
       - name: Initialize Terraform
         run: terraform init
-
+      
+      - name: Plan Terraform Changes
+        run: |
+          terraform plan
+          
       - name: Apply Terraform Changes
         run: terraform apply -auto-approve
 
