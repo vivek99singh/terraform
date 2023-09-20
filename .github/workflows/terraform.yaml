@@ -22,7 +22,7 @@ jobs:
         run: terraform init
 
       - name: Apply Terraform Changes
-        run: terraform apply -auto-approve
+        run: terraform apply -var-file=values.tfvars -auto-approve
 
       - name: Clean Up
         run: terraform destroy -auto-approve
