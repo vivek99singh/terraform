@@ -22,5 +22,5 @@ jobs:
         run: terraform init
 
       - name: Apply Terraform Changes
-        run: terraform destroy -var-file=values.tfvars -auto-approve
+        run: terraform apply -var-file=values.tfvars -auto-approve
 
