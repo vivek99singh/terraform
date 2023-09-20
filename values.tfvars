@@ -1,5 +1,5 @@
 subscription_id = "8be2f576-d66d-49f4-94ee-62d03f0dd825"
 client_id = "33531b34-30ad-448f-8c3b-ad92bba5d08f"
-client_secret = "pG.8Q~tvNdZ..AyygoL3p~E1458p_cdmu54a8b._"
+client_secret = "R658Q~gqdDBVriFuHcPjVVLVfMCKmP4GWkIA6a9u"
 tenant_id = "d4a82b53-8a96-48c6-9077-52670252929a"
 location = "West Europe"
