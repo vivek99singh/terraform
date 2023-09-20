@@ -1,9 +1,4 @@
 
-## The below block of code creates new resource group in Azure subscription
-provider "azurerm" {
-  features {}
-}
-
 # Create a Resource Group
 resource "azurerm_resource_group" "rg" {
   name     = "myrg"
