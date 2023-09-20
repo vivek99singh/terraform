@@ -17,8 +17,8 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2]
-        
+        uses: actions/checkout@v2
+
       - name: Debug Environment Variables
         run: |
           echo "ARM_CLIENT_ID: $ARM_CLIENT_ID"
