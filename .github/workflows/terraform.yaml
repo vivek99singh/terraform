@@ -62,4 +62,14 @@ jobs:
 
       - name: Apply Terraform Changes
         run: terraform apply -auto-approve
-
+      
+      - name: Commit backend configuration
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add backend.tf
+          git commit -m "Add backend configuration"
+          git push
+      
+      - name: Migrate Terraform state
+        run: terraform init -migrate-state
