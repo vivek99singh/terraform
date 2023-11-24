@@ -23,4 +23,5 @@ variable "tenant_id" {
 
 variable "location" {
   description = "The default Azure region for the resource provisioning"
+  default     = "West Europe"
 }
