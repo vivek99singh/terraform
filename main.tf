@@ -21,6 +21,7 @@ resource "null_resource" "configure_backend" {
     storage_account_id = azurerm_storage_account.stg.id
   }
 
+
   provisioner "local-exec" {
     command = <<EOT
     cat <<EOF > backend.tf
