@@ -40,13 +40,19 @@ jobs:
 #        with:
 #          creds: ${{ secrets.AZURE_CREDENTIALS }}
           
+#      - name: Set up Environment Variables
+#        run: |
+#          export TF_VAR_client_id=${{ secrets.AZURE_CLIENT_ID }}
+#          export TF_VAR_client_SECRET=${{ secrets.AZURE_CLIENT_SECRET }}          
+#          export TF_VAR_SUBSCRIPTION_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}
+#          export TF_VAR_TENANT_id=${{ secrets.AZURE_TENANT_ID }}
       - name: Set up Environment Variables
         run: |
-          export TF_VAR_client_id=${{ secrets.AZURE_CLIENT_ID }}
-          export TF_VAR_client_SECRET=${{ secrets.AZURE_CLIENT_SECRET }}          
-          export TF_VAR_SUBSCRIPTION_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          export TF_VAR_TENANT_id=${{ secrets.AZURE_TENANT_ID }}
-
+          echo "TF_VAR_client_id=${{ secrets.AZURE_CLIENT_ID }}" >> $GITHUB_ENV
+          echo "TF_VAR_client_secret=${{ secrets.AZURE_CLIENT_SECRET }}" >> $GITHUB_ENV
+          echo "TF_VAR_subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
+          echo "TF_VAR_tenant_id=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
+        
       - name: Initialize Terraform
         run: terraform init
       
