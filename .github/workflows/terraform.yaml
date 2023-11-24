@@ -52,7 +52,7 @@ jobs:
       
       - name: Plan Terraform Changes
         run: |
-          terraform plan -auto-approve
+          terraform plan
 
       - name: Apply Terraform Changes
         run: terraform apply -auto-approve
