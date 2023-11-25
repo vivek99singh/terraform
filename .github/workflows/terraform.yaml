@@ -30,27 +30,31 @@ jobs:
         run: |
           terraform plan
 
-      - name: Apply Terraform Changes
-        run: terraform apply -auto-approve
-      
+          - name: Apply Terraform Changes
+          run: terraform apply -auto-approve
+        
+        # Ensure that the container has been created
+        # This step assumes Azure CLI is already logged in
+      - name: Check container existence
+        run: |
+            az storage container show --name tfstate --account-name dvstg991983 --auth-mode login
+        
       - name: Generate backend configuration
         run: |
-          cat <<EOF > backend.tf
-          terraform {
-            backend "azurerm" {
-              resource_group_name   = "myrg"
-              storage_account_name  = "dvstg991983"
-              container_name        = "tfstate"
-              key                   = "terraform.tfstate"
+            cat <<EOF >backend.tf
+            terraform {
+              backend "azurerm" {
+                resource_group_name   = "myrg"
+                storage_account_name  = "dvstg991983"
+                container_name        = "tfstate"
+                key                   = "terraform.tfstate"
+              }
             }
-          }
-          EOF
-      
-
-  # Migrate state to the new backend
-      - name: Migrate Terraform state to the Azure backend
-        run: |
-          terraform init -migrate-state
+            EOF
+        
+      - name: Initialize Terraform with new backend
+        run: terraform init -reconfigure
+        
 
       - name: Commit backend configuration
         run: |
