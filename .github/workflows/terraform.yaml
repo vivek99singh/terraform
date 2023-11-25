@@ -60,7 +60,7 @@ jobs:
       - name: Initialize Terraform with new backend
         env:
           TF_CLI_ARGS: "init -reconfigure"
-        run: echo "yes" | terraform         
+        run: yes | terraform         
 
       - name: Commit backend configuration
         if: github.ref == 'refs/heads/master'
