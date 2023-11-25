@@ -58,8 +58,10 @@ jobs:
             EOF
         
       - name: Initialize Terraform with new backend
-        run: terraform init -reconfigure -input=false
-        
+        env:
+          TERRAFORM_INIT_INPUT: "true"
+        run: terraform init -reconfigure
+          
 
       - name: Commit backend configuration
         if: github.ref == 'refs/heads/master'
