@@ -58,7 +58,7 @@ jobs:
             EOF
         
       - name: Initialize Terraform with new backend
-        run:  terraform init
+        run: echo "yes" | terraform init -reconfigure
         
 
       - name: Commit backend configuration
