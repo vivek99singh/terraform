@@ -53,6 +53,7 @@ jobs:
                 storage_account_name  = "dvstg991983"
                 container_name        = "tfstate"
                 key                   = "terraform.tfstate"
+                auto_approve           = true
               }
             }
             EOF
