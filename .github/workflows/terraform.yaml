@@ -70,5 +70,5 @@ jobs:
           git checkout ${{ github.ref }}
           git add backend.tf
           git commit -m "Add backend configuration"
-          git push
+          git push origin HEAD:master
         
