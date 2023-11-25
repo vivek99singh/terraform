@@ -18,10 +18,10 @@ jobs:
 
       - name: Set up Environment Variables
         run: |
-          echo "TF_VAR_client_id=${{ secrets.AZURE_CLIENT_ID }}" >> $GITHUB_ENV
-          echo "TF_VAR_client_secret=${{ secrets.AZURE_CLIENT_SECRET }}" >> $GITHUB_ENV
-          echo "TF_VAR_subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
-          echo "TF_VAR_tenant_id=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
+          echo "ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}" >> $GITHUB_ENV
+          echo "ARM_CLIENT_SECRET=${{ secrets.AZURE_CLIENT_SECRET }}" >> $GITHUB_ENV
+          echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
+          echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
         
       - name: Initialize Terraform
         run: terraform init
@@ -33,19 +33,19 @@ jobs:
       - name: Apply Terraform Changes
         run: terraform apply -auto-approve
       
-      # Generate backend.tf dynamically
       - name: Generate backend configuration
         run: |
           cat <<EOF > backend.tf
           terraform {
             backend "azurerm" {
-            resource_group_name   = "myrg"
-            storage_account_name  = "dvstg991983"
-            container_name        = "tfstate"
-            key                   = "terraform.tfstate"
-           }
+              resource_group_name   = "myrg"
+              storage_account_name  = "dvstg991983"
+              container_name        = "tfstate"
+              key                   = "terraform.tfstate"
+            }
           }
           EOF
+      
 
   # Migrate state to the new backend
       - name: Migrate Terraform state to the Azure backend
@@ -56,7 +56,9 @@ jobs:
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
+          git fetch
+          git checkout ${{ github.ref }}
           git add backend.tf
           git commit -m "Add backend configuration"
           git push
-      
+        
