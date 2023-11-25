@@ -13,25 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-#      - name: Debug Environment Variables
-#        run: |
-#          echo "ARM_CLIENT_ID: $ARM_CLIENT_ID"
-#          echo "ARM_CLIENT_SECRET: $ARM_CLIENT_SECRET"
-#          echo "ARM_SUBSCRIPTION_ID: $ARM_SUBSCRIPTION_ID"
-#          echo "ARM_TENANT_ID: $ARM_TENANT_ID"
-#        env:
-#          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-#          ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-#          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-#          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-#      
-#      - name: Configure Azure credentials
-#        run: |
-#          echo "ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}" >> $GITHUB_ENV
-#          echo "ARM_CLIENT_SECRET=${{ secrets.AZURE_CLIENT_SECRET }}" >> $GITHUB_ENV
-#          echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
-#          echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
-
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
 
@@ -52,6 +33,24 @@ jobs:
       - name: Apply Terraform Changes
         run: terraform apply -auto-approve
       
+      # Generate backend.tf dynamically
+      - name: Generate backend configuration
+        run: |
+          cat <<EOF > backend.tf
+          terraform {
+            backend "azurerm" {
+            resource_group_name   = "myrg"
+            storage_account_name  = "dvstg991983"
+            container_name        = "tfstate"
+            key                   = "terraform.tfstate"
+           }
+          }
+          EOF
+
+  # Migrate state to the new backend
+      - name: Migrate Terraform state to the Azure backend
+        run: |
+          terraform init -migrate-state
 
       - name: Commit backend configuration
         run: |
@@ -61,5 +60,3 @@ jobs:
           git commit -m "Add backend configuration"
           git push
       
-      - name: Migrate Terraform state
-        run: terraform init -migrate-state
