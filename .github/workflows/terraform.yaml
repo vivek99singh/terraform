@@ -60,8 +60,10 @@ jobs:
         
       - name: Initialize Terraform with new backend
         env:
-          TF_CLI_ARGS: "init -reconfigure"
-        run: yes | terraform         
+          TERRAFORM_CLI_ARGS: "migrate_state -input=false -force-copy"
+          TF_RECONFIGURE: "yes"
+        run: terraform init $TERRAFORM_CLI_ARGS
+                 
 
       - name: Commit backend configuration
         if: github.ref == 'refs/heads/master'
