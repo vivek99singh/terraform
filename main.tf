@@ -14,5 +14,12 @@ resource "azurerm_storage_account" "stg" {
   account_replication_type = "LRS"
 }
 
+# Create a Storage Container within the Storage Account
+resource "azurerm_storage_container" "tfstate" {
+  name                  = "tfstate"
+  storage_account_name  = azurerm_storage_account.stg.name
+  container_access_type = "private"
+}
+
 
 
