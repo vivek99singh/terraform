@@ -35,9 +35,9 @@ jobs:
         
         # Ensure that the container has been created
         # This step assumes Azure CLI is already logged in
-      - name: Check container existence
-        run: |
-            az storage container show --name tfstate --account-name dvstg991983 --auth-mode login
+#      - name: Check container existence
+#        run: |
+#            az storage container show --name tfstate --account-name dvstg991983 --auth-mode login
         
       - name: Generate backend configuration
         run: |
