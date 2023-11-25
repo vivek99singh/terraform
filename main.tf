@@ -15,7 +15,6 @@ resource "azurerm_storage_account" "stg" {
 }
 
 
-
 # Create a Storage Container within the Storage Account
 resource "azurerm_storage_container" "tfstate" {
   name                  = "tfstate"
